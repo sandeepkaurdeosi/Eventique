@@ -1,46 +1,50 @@
 'use client'
 
-import Image from 'next/image';
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { Input } from '../input';
-import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Input } from '../input'
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-const Search = ({ placeholder = 'Search title...' }: { placeholder?: string }) => {
-  const [query, setQuery] = useState('');
-  const router = useRouter();
-  const searchParams = useSearchParams();
+type SearchProps = {
+  placeholder?: string
+}
+
+const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
+  const [query, setQuery] = useState('')
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      let newUrl = '';
+      let newUrl = ''
 
-      if(query) {
+      if (query) {
         newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: 'query',
-          value: query
+          value: query,
         })
       } else {
         newUrl = removeKeysFromQuery({
           params: searchParams.toString(),
-          keysToRemove: ['query']
+          keysToRemove: ['query'],
         })
       }
 
-      router.push(newUrl, { scroll: false });
+      router.push(newUrl, { scroll: false })
     }, 300)
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => clearTimeout(delayDebounceFn)
   }, [query, searchParams, router])
 
   return (
     <div className="flex min-h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
       <Image src="/assets/icons/search.svg" alt="search" width={24} height={24} />
-      <Input 
+      <Input
         type="text"
         placeholder={placeholder}
-        value={query} 
+        value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="p-regular-16 border-0 outline-offset-0 placeholder:text-grey-500 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
@@ -48,4 +52,5 @@ const Search = ({ placeholder = 'Search title...' }: { placeholder?: string }) =
   )
 }
 
-export default Search;
+export default Search
+
