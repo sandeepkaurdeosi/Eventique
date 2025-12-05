@@ -1,9 +1,10 @@
+"use client";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
+  // SheetDescription,
+  // SheetHeader,
+  // SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from "next/image"
@@ -24,9 +25,9 @@ const MobileNav = () => {
             className="cursor-pointer"
           />
         </SheetTrigger>
-        <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
+        <SheetContent className="flex flex-col gap-6 mt-7 bg-white md:hidden">
           <Image 
-            src="/assets/images/logo.svg"
+            src="/assets/images/photo.png"
             alt="logo"
             width={128}
             height={38}

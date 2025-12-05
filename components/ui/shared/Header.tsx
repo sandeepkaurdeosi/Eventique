@@ -1,3 +1,4 @@
+"use client"
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import Image from "next/image"
 import Link from "next/link"
@@ -7,7 +8,7 @@ import NavItems from "./NavItems"
 
 const Header = () => {
   return (
-    <header className="w-full border-b p-4">
+    <header className="w-full border-2 p-4">
       <div className="wrapper flex items-center justify-between md:px-10 md:pl-24">
         {/* Logo */}
         <Link href="/" className="w-48 md:w-56">
@@ -21,7 +22,7 @@ const Header = () => {
 
         {/* Navigation (only visible when signed in) */}
         <SignedIn>
-          <nav className="hidden md:flex md:gap-6">
+          <nav className="hidden md:flex md:gap-4 font-bold">
             <NavItems />
           </nav>
         </SignedIn>
@@ -34,7 +35,7 @@ const Header = () => {
           </SignedIn>
 
           <SignedOut>
-            <Button asChild className="rounded-full" size="lg">
+            <Button asChild className="rounded-full mr-20" size="lg">
               <Link href="/sign-in">Login</Link>
             </Button>
           </SignedOut>

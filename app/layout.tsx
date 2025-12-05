@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import "react-datepicker/dist/react-datepicker.css";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],

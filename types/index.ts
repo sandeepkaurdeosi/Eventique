@@ -103,20 +103,21 @@ export type CreateCategoryParams = {
   categoryName: string
 }
 
-// ====== ORDER PARAMS
+// ====== ORDER PARAMS (FIXED & FINAL)
 export type CheckoutOrderParams = {
   eventTitle: string
   eventId: string
   price: string
   isFree: boolean
-  buyerId: string
+  buyerId: string           // Clerk ID
 }
 
+// ⭐ FIXED: Matches Webhook + DB Model
 export type CreateOrderParams = {
-  stripeId: string
+  stripeId: string          // REQUIRED in Order model
   eventId: string
-  buyerId: string
-  totalAmount: string
+  buyerId: string           // Clerk ID → Convert to Mongo ID in createOrder()
+  totalAmount: number       // Stored as string in DB
   createdAt: Date
 }
 
@@ -126,7 +127,7 @@ export type GetOrdersByEventParams = {
 }
 
 export type GetOrdersByUserParams = {
-  userId: string | null
+  userId: string | null     // Clerk ID
   limit?: number
   page: string | number | null
 }

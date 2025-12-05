@@ -120,3 +120,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+.datePicker input {
+  @apply bg-transparent border-0 focus:ring-0 text-gray-700 text-sm cursor-pointer;
+}
+
+.react-datepicker {
+  @apply bg-white border border-gray-200 rounded-lg shadow-lg;
+}
+
+.react-datepicker__header {
+  @apply bg-gray-100 border-b border-gray-300;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-blue-500 text-white rounded-full;
+}

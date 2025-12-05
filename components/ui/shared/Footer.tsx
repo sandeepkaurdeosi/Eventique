@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="border-t">
       <div className="wrapper flex flex-col items-center justify-between gap-3 p-5 text-center sm:flex-row">
         {/* Logo */}
-        <Link href="/" className="flex-shrink-0 md:pl-24">
+        <Link href="/" className="shrink-0 md:pl-24">
           <Image 
             src="/assets/images/photo.png"
             alt="logo"
@@ -18,11 +18,11 @@ const Footer = () => {
         </Link>
 
         {/* Text Section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-center w-full md:relative">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-center w-full  md:mr-20 ">
           <p className="text-sm md:mx-auto">
             © 2026 Eventique. All rights reserved.
           </p>
-          <p className="flex items-center justify-center md:absolute md:right-10 mt-1 md:mt-0 text-sm">
+          <p className="flex items-center justify-center md:absolute md:right-20 mt-1 md:mt-0 text-sm">
             Made by <span className="ml-1 mr-2 font-bold">Sandeep Deosi</span> 
             with <FaHeart className="ml-1 text-red-500" />
           </p>
