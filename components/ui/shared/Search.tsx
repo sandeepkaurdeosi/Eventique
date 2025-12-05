@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Input } from '../input'
 import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -17,19 +17,21 @@ const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProp
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // sync with parent value
   useEffect(() => {
     setQuery(value)
   }, [value])
 
-  useEffect(() => {
-    const debounce = setTimeout(() => {
+  // Memoized push to avoid re-renders
+  const updateQuery = useCallback(
+    (q: string) => {
       let newUrl = ''
 
-      if (query) {
+      if (q) {
         newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: 'query',
-          value: query,
+          value: q,
         })
       } else {
         newUrl = removeKeysFromQuery({
@@ -37,12 +39,18 @@ const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProp
           keysToRemove: ['query'],
         })
       }
-
       router.push(newUrl, { scroll: false })
+    },
+    [searchParams, router]
+  )
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      updateQuery(query)
     }, 300)
 
     return () => clearTimeout(debounce)
-  }, [query, searchParams, router])
+  }, [query, updateQuery])
 
   return (
     <div className="flex min-h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
@@ -55,7 +63,7 @@ const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProp
           setQuery(e.target.value)
           onChange(e)
         }}
-        className="p-regular-16 border-0 outline-offset-0 placeholder:text-grey-500 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="p-regular-16 border-0 outline-none focus:ring-0"
       />
     </div>
   )

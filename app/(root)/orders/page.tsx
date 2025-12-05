@@ -1,6 +1,6 @@
-'use client' // for Search input interactivity
+'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Search from '@/components/ui/shared/Search'
 import { getOrdersByEvent } from '@/lib/actions/Order.actions'
 import { formatDateTime, formatPrice } from '@/lib/utils'
@@ -18,28 +18,29 @@ const Orders = ({ params, searchParams }: OrdersProps) => {
   const [orders, setOrders] = useState<IOrderItem[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchOrders = async (query: string) => {
-    setLoading(true)
-    try {
-      const data = await getOrdersByEvent({
-        eventId,
-        searchString: query,
-      })
-      setOrders(data || [])
-    } catch (err) {
-      console.error('Failed to fetch orders', err)
-      setOrders([])
-    } finally {
-      setLoading(false)
-    }
-  }
+  const fetchOrders = useCallback(
+    async (query: string) => {
+      setLoading(true)
+      try {
+        const data = await getOrdersByEvent({
+          eventId,
+          searchString: query,
+        })
+        setOrders(data || [])
+      } catch (err) {
+        console.error('Failed to fetch orders', err)
+        setOrders([])
+      } finally {
+        setLoading(false)
+      }
+    },
+    [eventId] // dependency
+  )
 
-  // fetch orders initially
   useEffect(() => {
     fetchOrders(initialQuery)
-  }, [eventId, initialQuery])
+  }, [fetchOrders, initialQuery])
 
-  // fetch orders on search change
   const handleSearch = (value: string) => {
     setSearchText(value)
     fetchOrders(value)
@@ -113,3 +114,4 @@ const Orders = ({ params, searchParams }: OrdersProps) => {
 }
 
 export default Orders
+
