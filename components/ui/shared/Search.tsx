@@ -6,17 +6,23 @@ import { Input } from '../input'
 import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-type SearchProps = {
+export type SearchProps = {
   placeholder?: string
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
-  const [query, setQuery] = useState('')
+const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProps) => {
+  const [query, setQuery] = useState(value)
   const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
+    setQuery(value)
+  }, [value])
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
       let newUrl = ''
 
       if (query) {
@@ -35,7 +41,7 @@ const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
       router.push(newUrl, { scroll: false })
     }, 300)
 
-    return () => clearTimeout(delayDebounceFn)
+    return () => clearTimeout(debounce)
   }, [query, searchParams, router])
 
   return (
@@ -45,7 +51,10 @@ const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
         type="text"
         placeholder={placeholder}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => {
+          setQuery(e.target.value)
+          onChange(e)
+        }}
         className="p-regular-16 border-0 outline-offset-0 placeholder:text-grey-500 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
@@ -53,4 +62,5 @@ const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
 }
 
 export default Search
+
 
