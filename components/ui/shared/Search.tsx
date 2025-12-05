@@ -1,56 +1,38 @@
 'use client'
 
-import Image from 'next/image'
-import { useEffect, useState, useCallback } from 'react'
-import { Input } from '../input'
-import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { Input } from '../input';
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export type SearchProps = {
-  placeholder?: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+const Search = ({ placeholder = 'Search title...' }: { placeholder?: string }) => {
+  const [query, setQuery] = useState('');
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProps) => {
-  const [query, setQuery] = useState(value)
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
-  // sync with parent value
   useEffect(() => {
-    setQuery(value)
-  }, [value])
+    const debounce = setTimeout(() => {
+      let newUrl = '';
 
-  // Memoized push to avoid re-renders
-  const updateQuery = useCallback(
-    (q: string) => {
-      let newUrl = ''
-
-      if (q) {
+      if (query) {
         newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: 'query',
-          value: q,
-        })
+          value: query,
+        });
       } else {
         newUrl = removeKeysFromQuery({
           params: searchParams.toString(),
           keysToRemove: ['query'],
-        })
+        });
       }
-      router.push(newUrl, { scroll: false })
-    },
-    [searchParams, router]
-  )
 
-  useEffect(() => {
-    const debounce = setTimeout(() => {
-      updateQuery(query)
-    }, 300)
+      router.push(newUrl, { scroll: false });
+    }, 300);
 
-    return () => clearTimeout(debounce)
-  }, [query, updateQuery])
+    return () => clearTimeout(debounce);
+  }, [query, searchParams, router]);
 
   return (
     <div className="flex min-h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
@@ -59,16 +41,13 @@ const Search = ({ placeholder = 'Search title...', value, onChange }: SearchProp
         type="text"
         placeholder={placeholder}
         value={query}
-        onChange={(e) => {
-          setQuery(e.target.value)
-          onChange(e)
-        }}
-        className="p-regular-16 border-0 outline-none focus:ring-0"
+        onChange={(e) => setQuery(e.target.value)}
+        className="p-regular-16 border-0 bg-grey-50 outline-offset-0 placeholder:text-grey-500 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
-  )
+  );
 }
 
-export default Search
+export default Search;
 
 

@@ -57,11 +57,7 @@ const Orders = ({ params, searchParams }: OrdersProps) => {
 
       {/* Search */}
       <section className="wrapper md:mx-20 my-5">
-        <Search
-          placeholder="Search buyer name..."
-          value={searchText}
-          onChange={(e) => handleSearch(e.target.value)}
-        />
+        <Search />
       </section>
 
       {/* Orders Table */}

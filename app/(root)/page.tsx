@@ -1,5 +1,5 @@
 import CategoryFilter from '@/components/ui/shared/CategoryFilter';
-import  Collection  from '@/components/ui/shared/Collection'
+import Collection from '@/components/ui/shared/Collection'
 import Search from '@/components/ui/shared/Search';
 import { Button } from '@/components/ui/button'
 import { getAllEvents } from '@/lib/actions/event.actions';
@@ -21,7 +21,7 @@ export default async function Home(props: SearchParamProps) {
   })
 
   return (
-    <> 
+    <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10 md:pl-28  px-3">
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
           <div className="flex flex-col justify-center gap-8">
@@ -34,7 +34,7 @@ export default async function Home(props: SearchParamProps) {
             </Button>
           </div>
 
-          <Image 
+          <Image
             src="/assets/images/hero.png"
             alt="hero"
             width={1000}
@@ -42,17 +42,17 @@ export default async function Home(props: SearchParamProps) {
             className="max-h-[70vh] object-contain object-center 2xl:max-h-[50vh] px-3 md:px-auto"
           />
         </div>
-      </section> 
+      </section>
 
       <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12 md:pl-28 md:pr-24 px-3">
         <h2 className=" md:text-4xl font-bold  text-xl">Trust by <br /> Thousands of Events</h2>
 
         <div className="flex w-full flex-col md:gap-12 md:flex-row  ">
-          <Search />
-          <CategoryFilter /> 
+          <Search placeholder="Search events..." />
+          <CategoryFilter />
         </div>
 
-        <Collection 
+        <Collection
           data={events?.data}
           emptyTitle="No Events Found"
           emptyStateSubtext="Come back later"
