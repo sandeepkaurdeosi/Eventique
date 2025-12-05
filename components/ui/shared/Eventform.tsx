@@ -33,6 +33,7 @@ type EventFormProps = {
   type: "Create" | "Update";
   event?: IEvent;
   eventId?: string;
+   userId?: string;
 };
 
 const EventForm = ({ type, event, eventId }: EventFormProps) => {

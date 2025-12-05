@@ -1,13 +1,9 @@
 'use client'
-import React, { useEffect } from 'react'
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useEffect } from 'react';
 import { IEvent } from '@/lib/mongodb/database/models/event.model';
 import { Button } from '../button';
-import { checkoutOrder } from '@/lib/actions/Order.actions';
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-
-const Checkout = ({ event, userId }: { event: IEvent, userId: string }) => {
+const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get('success')) {
@@ -24,23 +20,32 @@ const Checkout = ({ event, userId }: { event: IEvent, userId: string }) => {
       eventId: event._id,
       price: event.price,
       isFree: event.isFree,
-      buyerId: userId
-    }
+      buyerId: userId,
+    };
 
-    const checkout = await checkoutOrder(order);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order),
+      });
+      const data = await res.json();
 
-    // Redirect to Stripe Checkout
-    const stripe = await stripePromise;
-    if (stripe && checkout.url) {
-      window.location.href = checkout.url; // ✅ full URL like "https://checkout.stripe.com/..."
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('Checkout failed:', data.error);
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
     }
-  }
+  };
 
   return (
     <Button onClick={onCheckout} size="lg" className="button sm:w-fit">
       {event.isFree ? 'Get Ticket' : 'Buy Ticket'}
     </Button>
-  )
-}
+  );
+};
 
 export default Checkout;
