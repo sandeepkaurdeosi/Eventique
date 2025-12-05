@@ -1,39 +1,21 @@
-import mongoose from "mongoose";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-  throw new Error("❌ MongoDB connection string is missing in .env.local file!");
-}
+const cached = (global as any).mongoose || { conn: null, promise: null };
 
-let cached = global.mongoose;
+export const connectToDatabase = async () => {
+  if (cached.conn) return cached.conn;
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
+  if(!MONGODB_URI) throw new Error('MONGODB_URI is missing');
 
-export async function connectToDatabase() {
-  if (cached.conn) {
-    console.log("🟢 Using existing MongoDB connection");
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(MONGODB_URI, {
-        dbName: "evently",
-        bufferCommands: false,
-      })
-      .then((mongoose) => {
-        console.log("✅ MongoDB Connected Successfully!");
-        return mongoose;
-      })
-      .catch((err) => {
-        console.error("❌ Failed to connect to MongoDB:", err.message);
-        throw err;
-      });
-  }
+  cached.promise = cached.promise || mongoose.connect(MONGODB_URI, {
+    dbName: 'evently',
+    bufferCommands: false,
+  })
 
   cached.conn = await cached.promise;
+
   return cached.conn;
 }
