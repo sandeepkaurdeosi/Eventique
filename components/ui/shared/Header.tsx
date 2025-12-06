@@ -1,4 +1,5 @@
-"use client"
+'use client'
+
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import Image from "next/image"
 import Link from "next/link"
@@ -30,7 +31,9 @@ const Header = () => {
         {/* User actions */}
         <div className="flex w-32 justify-end gap-3">
           <SignedIn>
+            {/* User profile button */}
             <UserButton afterSignOutUrl="/" />
+            {/* Mobile menu */}
             <MobileNav />
           </SignedIn>
 
